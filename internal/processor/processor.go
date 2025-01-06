@@ -1,3 +1,4 @@
+// Package processor implements the core transformation processing logic.
 package processor
 
 import (
@@ -10,20 +11,25 @@ import (
 )
 
 var (
-	ErrPluginInterface     = errors.New("plugin does not implement TransformerPlugin interface")
+	// ErrPluginInterface indicates that a plugin doesn't implement the required interface.
+	ErrPluginInterface = errors.New("plugin does not implement TransformerPlugin interface")
+	// ErrTransformerNotFound indicates that the requested transformer wasn't found.
 	ErrTransformerNotFound = errors.New("transformer not found")
 )
 
+// Processor manages the loading and execution of transformation plugins.
 type Processor struct {
 	plugins map[string]interfaces.TransformerPlugin
 }
 
+// NewProcessor creates and initializes a new Processor instance.
 func NewProcessor() *Processor {
 	return &Processor{
 		plugins: make(map[string]interfaces.TransformerPlugin),
 	}
 }
 
+// LoadPlugin loads a plugin from the given path and registers it with the processor.
 func (p *Processor) LoadPlugin(path string) error {
 	plug, err := plugin.Open(path)
 	if err != nil {
@@ -46,6 +52,7 @@ func (p *Processor) LoadPlugin(path string) error {
 	return nil
 }
 
+// Process executes the named transformer on the input data.
 func (p *Processor) Process(transformerName string, input []byte) ([]byte, error) {
 	plugin, exists := p.plugins[transformerName]
 	if !exists {

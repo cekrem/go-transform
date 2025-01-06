@@ -1,3 +1,4 @@
+// Package main provides the entry point for the transformation CLI tool.
 package main
 
 import (
