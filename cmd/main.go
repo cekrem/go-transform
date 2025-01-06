@@ -8,7 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cekrem/go-transform/processor"
+	"github.com/cekrem/go-transform/internal/processor"
 )
 
 func main() {

@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"plugin"
 
-	"github.com/cekrem/go-transform/interfaces"
+	"github.com/cekrem/go-transform/pkg/interfaces"
 )
 
 type Processor struct {

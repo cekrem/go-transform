@@ -1,6 +1,6 @@
 package main
 
-import "github.com/cekrem/go-transform/interfaces"
+import "github.com/cekrem/go-transform/pkg/interfaces"
 
 type passthrough struct{}
 
