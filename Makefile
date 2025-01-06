@@ -42,3 +42,22 @@ clean:
 test:
 	$(GO) test ./processor/... ./interfaces/...
 	@cd $(PLUGIN_DIR)/passthrough && $(GO) test ./... 
+
+.PHONY: plugin
+plugin:
+	@if [ "$(filter-out $@,$(MAKECMDGOALS))" = "" ]; then \
+		echo "Error: Plugin name not specified. Usage: make plugin <plugin-name>", or make plugins to build all; \
+		exit 1; \
+	fi
+	@mkdir -p $(BUILD_DIR)/plugins
+	@plugin_name=$(filter-out $@,$(MAKECMDGOALS)); \
+	echo "Building plugin: $$plugin_name"; \
+	if [ ! -d "$(PLUGIN_DIR)/$$plugin_name" ]; then \
+		echo "Error: Plugin '$$plugin_name' not found in $(PLUGIN_DIR)"; \
+		exit 1; \
+	fi; \
+	cd $(PLUGIN_DIR)/$$plugin_name && go mod tidy && \
+	$(GOBUILD) -buildmode=plugin -o ../../$(BUILD_DIR)/plugins/$$plugin_name.so || exit 1
+
+%:
+	@: 
