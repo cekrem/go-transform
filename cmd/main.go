@@ -36,6 +36,7 @@ func main() {
 	for _, plugin := range plugins {
 		if err := proc.LoadPlugin(plugin); err != nil {
 			log.Printf("Failed to load plugin %s: %v\n", plugin, err)
+
 			continue
 		}
 	}

@@ -1,6 +1,7 @@
 package processor
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 	"plugin"
@@ -8,9 +9,13 @@ import (
 	"github.com/cekrem/go-transform/pkg/interfaces"
 )
 
+var (
+	ErrPluginInterface     = errors.New("plugin does not implement TransformerPlugin interface")
+	ErrTransformerNotFound = errors.New("transformer not found")
+)
+
 type Processor struct {
-	transformer interfaces.Transformer
-	plugins     map[string]interfaces.TransformerPlugin
+	plugins map[string]interfaces.TransformerPlugin
 }
 
 func NewProcessor() *Processor {
@@ -44,7 +49,7 @@ func (p *Processor) LoadPlugin(path string) error {
 func (p *Processor) Process(transformerName string, input []byte) ([]byte, error) {
 	plugin, exists := p.plugins[transformerName]
 	if !exists {
-		return nil, fmt.Errorf("transformer %s not found", transformerName)
+		return nil, fmt.Errorf("%w: %s", ErrTransformerNotFound, transformerName)
 	}
 
 	transformer := plugin.NewTransformer()
