@@ -1,5 +1,5 @@
-// Package interfaces provides core abstractions for transformation operations.
-package interfaces
+// Package transformer provides core abstractions for transformation operations.
+package transformer
 
 // Transformer defines the interface for data transformation operations.
 type Transformer interface {
@@ -7,8 +7,8 @@ type Transformer interface {
 	Transform(input []byte) ([]byte, error)
 }
 
-// TransformerPlugin defines the interface for plugin implementations.
-type TransformerPlugin interface {
+// Plugin defines the interface for plugin implementations.
+type Plugin interface {
 	// NewTransformer creates and returns a new Transformer instance.
 	NewTransformer() Transformer
 }

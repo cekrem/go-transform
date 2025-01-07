@@ -1,23 +1,23 @@
-// Package main implements a passthrough transformer plugin.
+// Package main implements a passthrough transformer plugin that returns input without modification.
 package main
 
-import "github.com/cekrem/go-transform/pkg/interfaces"
+import "github.com/cekrem/go-transform/pkg/transformer"
 
-// passthroughTransformer implements a transformer that returns input unchanged.
+// passthroughPlugin implements transformer.Plugin without requiring any state.
+type passthroughPlugin struct{}
+
+// NewTransformer returns a new passthrough transformer instance.
+func (*passthroughPlugin) NewTransformer() transformer.Transformer {
+	return &passthroughTransformer{}
+}
+
+// passthroughTransformer implements transformer.Transformer without requiring any state.
 type passthroughTransformer struct{}
 
-// Transform returns the input bytes without modification.
+// Transform implements transformer.Transformer by returning the input bytes unmodified.
 func (pt *passthroughTransformer) Transform(input []byte) ([]byte, error) {
 	return input, nil
 }
 
-// passthroughPlugin implements the TransformerPlugin interface.
-type passthroughPlugin struct{}
-
-// NewTransformer creates a new passthrough transformer instance.
-func (*passthroughPlugin) NewTransformer() interfaces.Transformer {
-	return &passthroughTransformer{}
-}
-
-// Plugin is the exported symbol required by the plugin system.
-var Plugin passthroughPlugin
+// Plugin exports the passthrough transformer plugin for dynamic loading.
+var Plugin transformer.Plugin = &passthroughPlugin{}

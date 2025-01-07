@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"plugin"
 
-	"github.com/cekrem/go-transform/pkg/interfaces"
+	"github.com/cekrem/go-transform/pkg/transformer"
 )
 
 var (
@@ -19,13 +19,13 @@ var (
 
 // Processor manages the loading and execution of transformation plugins.
 type Processor struct {
-	plugins map[string]interfaces.TransformerPlugin
+	plugins map[string]transformer.Plugin
 }
 
 // NewProcessor creates and initializes a new Processor instance.
 func NewProcessor() *Processor {
 	return &Processor{
-		plugins: make(map[string]interfaces.TransformerPlugin),
+		plugins: make(map[string]transformer.Plugin),
 	}
 }
 
@@ -41,7 +41,7 @@ func (p *Processor) LoadPlugin(path string) error {
 		return fmt.Errorf("plugin does not export 'Plugin': %w", err)
 	}
 
-	transformerPlugin, ok := symPlugin.(interfaces.TransformerPlugin)
+	transformerPlugin, ok := symPlugin.(transformer.Plugin)
 	if !ok {
 		return fmt.Errorf("plugin does not implement TransformerPlugin interface")
 	}
