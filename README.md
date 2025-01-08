@@ -2,6 +2,11 @@
 
 A flexible Go-based text transformation tool that uses a plugin architecture to process input streams. This project follows Clean Architecture principles in general and the Dependency Inversion Principle in particular and emphasizes modularity through its plugin system.
 
+> The Dependency Inversion Principle states:
+>
+> 1. High-level modules should not import anything from low-level modules. Both should depend on abstractions (e.g., interfaces).
+> 2. Abstractions should not depend on details. Details (concrete implementations) should depend on abstractions.
+
 ## Features
 
 - Plugin-based architecture for extensible text transformations
@@ -42,10 +47,10 @@ echo "Hello, World!" | ./build/transform -transformer=passthrough
 ```
 .
 ├── cmd/            # Application entrypoint
-├── internal/       # Internal application code
-├── pkg/           # Public packages providing high level, stable abstractions
-├── plugins/       # Transformer plugins: this is where you add your own plugins
-└── build/         # Compiled binaries and plugins
+├── internal/       # Internal application code ("high-level modules" depending on abstract interfaces)
+├── pkg/            # Public packages providing stable and abstract interfaces
+├── plugins/        # Transformer plugins: this is where you add your own plugins ("low-level modules" depending on abstract interfaces)
+└── build/          # Compiled binaries and plugins
 ```
 
 ## Development
