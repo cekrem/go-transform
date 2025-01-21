@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	// ErrPluginInterface indicates that a plugin doesn't implement the required interface.
+	// nErrPluginInterface indicates that a plugin doesn't implement the required interface.
 	ErrPluginInterface = errors.New("plugin does not implement TransformerPlugin interface")
 	// ErrTransformerNotFound indicates that the requested transformer wasn't found.
 	ErrTransformerNotFound = errors.New("transformer not found")
@@ -43,7 +43,7 @@ func (p *Processor) LoadPlugin(path string) error {
 
 	transformerPlugin, ok := symPlugin.(transformer.Plugin)
 	if !ok {
-		return fmt.Errorf("plugin does not implement TransformerPlugin interface")
+		return ErrPluginInterface
 	}
 
 	// Use the filename without extension as the plugin name

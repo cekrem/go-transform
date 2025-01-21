@@ -20,4 +20,4 @@ func (pt *passthroughTransformer) Transform(input []byte) ([]byte, error) {
 }
 
 // Plugin exports the passthrough transformer plugin for dynamic loading.
-var Plugin transformer.Plugin = &passthroughPlugin{}
+var Plugin passthroughPlugin
