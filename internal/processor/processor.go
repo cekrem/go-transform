@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"plugin"
 
-	"github.com/cekrem/go-transform/pkg/transformer"
+	"github.com/cekrem/go-transform/pkg/domain"
 )
 
 var (
-	// nErrPluginInterface indicates that a plugin doesn't implement the required interface.
+	// ErrPluginInterface indicates that a plugin doesn't implement the required interface.
 	ErrPluginInterface = errors.New("plugin does not implement TransformerPlugin interface")
 	// ErrTransformerNotFound indicates that the requested transformer wasn't found.
 	ErrTransformerNotFound = errors.New("transformer not found")
@@ -19,13 +19,13 @@ var (
 
 // Processor manages the loading and execution of transformation plugins.
 type Processor struct {
-	plugins map[string]transformer.Plugin
+	plugins map[string]domain.Plugin
 }
 
 // NewProcessor creates and initializes a new Processor instance.
 func NewProcessor() *Processor {
 	return &Processor{
-		plugins: make(map[string]transformer.Plugin),
+		plugins: make(map[string]domain.Plugin),
 	}
 }
 
@@ -41,7 +41,7 @@ func (p *Processor) LoadPlugin(path string) error {
 		return fmt.Errorf("plugin does not export 'Plugin': %w", err)
 	}
 
-	transformerPlugin, ok := symPlugin.(transformer.Plugin)
+	transformerPlugin, ok := symPlugin.(domain.Plugin)
 	if !ok {
 		return ErrPluginInterface
 	}
@@ -54,11 +54,11 @@ func (p *Processor) LoadPlugin(path string) error {
 
 // Process executes the named transformer on the input data.
 func (p *Processor) Process(transformerName string, input []byte) ([]byte, error) {
-	plugin, exists := p.plugins[transformerName]
+	plug, exists := p.plugins[transformerName]
 	if !exists {
 		return nil, fmt.Errorf("%w: %s", ErrTransformerNotFound, transformerName)
 	}
 
-	transformer := plugin.NewTransformer()
+	transformer := plug.NewTransformer()
 	return transformer.Transform(input)
 }

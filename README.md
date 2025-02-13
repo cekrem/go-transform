@@ -1,18 +1,12 @@
 # go-transform
 
-A flexible Go-based text transformation tool that uses a plugin architecture to process input streams. This project follows Clean Architecture principles in general and the Dependency Inversion Principle in particular and emphasizes modularity through its plugin system.
-
-> The Dependency Inversion Principle states:
->
-> 1. High-level modules should not import anything from low-level modules. Both should depend on abstractions (e.g., interfaces).
-> 2. Abstractions should not depend on details. Details (concrete implementations) should depend on abstractions.
+A flexible Go-based text transformation tool that uses a plugin architecture to process input streams. This project demonstrates the Dependency Inversion Principle with three distinct layers, emphasizing modularity through its plugin system.
 
 ## Features
 
 - Plugin-based architecture for extensible text transformations
 - Clean separation of concerns following Clean Architecture principles
 - Simple CLI interface
-- Stream-based processing for efficient handling of large inputs
 
 ## Prerequisites
 
@@ -46,18 +40,51 @@ echo "Hello, World!" | ./build/transform -transformer=passthrough
 
 ```
 .
-├── cmd/            # Application entrypoint
-├── internal/       # Internal application code ("high-level modules" depending on abstract interfaces)
-├── pkg/            # Public packages providing stable and abstract interfaces
-├── plugins/        # Transformer plugins: this is where you add your own plugins ("low-level modules" depending on abstract interfaces)
-└── build/          # Compiled binaries and plugins
+├── cmd/                 # Application entrypoint
+├── pkg/
+│   └── domain/         # Core business rules and interfaces
+├── internal/
+│   └── app/           # Application logic
+│       └── processor/ # Transformation orchestration
+└── plugins/           # Infrastructure implementations (plugins)
 ```
+
+## Architecture
+
+This project demonstrates Clean Architecture principles with three layers:
+
+### Domain Layer (`pkg/domain`)
+
+- Contains core business rules and interfaces
+- Has no external dependencies
+- Defines what transformers should do
+- `Transformer` and `Plugin` interfaces
+
+### Application Layer (`internal/app`)
+
+- Contains core application logic
+- Depends only on domain interfaces
+- Coordinates the transformation process
+- `Processor` that manages plugins and executes transformations
+
+### Infrastructure Layer (`plugins`)
+
+- Contains concrete implementations
+- Depends on domain interfaces
+- Implements specific transformation strategies
+- `passthrough` plugin
+
+The project follows the Dependency Inversion Principle by:
+
+1. Defining abstractions in the domain layer
+2. Having both application and infrastructure layers depend on domain interfaces
+3. Ensuring all dependencies point toward the domain layer
 
 ## Development
 
 ### Creating New Plugins
 
-Plugins should be created in the `plugins` directory and implement the transformer interface. See the `passthrough` plugin for an example implementation.
+Plugins should be created in the `plugins` directory and implement the transformer interface from the domain layer. See the `passthrough` plugin for an example implementation.
 
 ## Contributing
 
