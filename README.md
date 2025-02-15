@@ -2,6 +2,8 @@
 
 A flexible Go-based text transformation tool that uses a plugin architecture to process input streams. This project demonstrates the Dependency Inversion Principle with three distinct layers, emphasizing modularity through its plugin system.
 
+I wrote about an earlier version of this project [on my blog](https://cekrem.github.io/posts/clean-architecture-and-plugins-in-go/), check it out for more context.
+
 ## Features
 
 - Plugin-based architecture for extensible text transformations
